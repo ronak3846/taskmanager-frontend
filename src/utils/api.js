@@ -1,8 +1,9 @@
 import axios from "axios";
 
-// TEMP: Manually define backend base URL
+console.log("🔧 API Base URL:", import.meta.env.VITE_API_BASE_URL);
+
 const API = axios.create({
-  baseURL: "https://taskmanager-backend-zlv5.onrender.com/api",
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
   withCredentials: true,
 });
 
