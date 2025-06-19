@@ -14,20 +14,30 @@ function UserProfile() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
     try {
-      await API.put(`/user/profile`, {
-        name,
+      // 1. Update profile name (optional)
+      await API.put(`/employees/${user._id}/profile`, {
+        firstname: name,
         email,
-        currentPassword,
-        newPassword,
       });
+
+      // 2. If password fields are filled, update password
+      if (currentPassword && newPassword) {
+        await API.put(`/employees/${user._id}/change-password`, {
+          currentPassword,
+          newPassword,
+        });
+      }
+
       alert("Profile updated!");
-      navigate(-1);
+      navigate(-1); // Go back
     } catch (err) {
       console.error(err);
       alert("Failed to update profile");
     }
   };
+  
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4">
