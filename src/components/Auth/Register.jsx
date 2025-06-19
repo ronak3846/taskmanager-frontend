@@ -1,0 +1,120 @@
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+
+function Register() {
+  const [formData, setFormData] = useState({
+    firstname: "",
+    email: "",
+    password: "",
+    role: "employee",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("http://localhost:5000/api/auth/register", formData);
+      alert("Registration successful! Please login.");
+      navigate("/login");
+    } catch (error) {
+      alert("Registration failed");
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="w-full min-h-screen bg-[#ebe7fb]">
+      <div className="flex flex-col md:flex-row h-full w-full">
+        {/* Left Panel - Form */}
+        <div className="flex items-center justify-center w-full md:w-1/2 p-6 md:p-10">
+          <div className="w-full max-w-md">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
+              Create an Account
+            </h2>
+            <p className="text-sm text-center text-gray-500 mb-8">
+              Join us to manage your tasks better!
+            </p>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <input
+                  type="text"
+                  name="firstname"
+                  placeholder="Your Name"
+                  value={formData.firstname}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Enter a strong password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 pr-16 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-3 text-sm text-purple-600"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition"
+              >
+                Sign Up
+              </button>
+            </form>
+
+            <p className="mt-6 text-center text-sm text-gray-500">
+              Already registered?{" "}
+              <Link
+                to="/login"
+                className="text-purple-600 hover:underline font-medium"
+              >
+                Login
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Right Panel - Image */}
+        <div className="w-full md:w-1/2 h-64 md:h-screen">
+          <img
+            src="https://images.unsplash.com/photo-1618044619888-009e412ff12a?q=80&w=1171&auto=format&fit=crop"
+            alt="Register Illustration"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Register;
