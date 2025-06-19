@@ -1,9 +1,9 @@
-// src/utils/api.js
 import axios from "axios";
 
+// ✅ Use environment variable instead of hardcoding
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/", // ✅ Important fix
-  withCredentials: true, // optional, if you're using cookies
+  baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`,
+  withCredentials: true,
 });
 
 export default API;
