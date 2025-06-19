@@ -1,10 +1,8 @@
 import axios from "axios";
 
-// Debug log
-console.log(" BASE URL:", process.env.REACT_APP_API_BASE_URL);
-
+// TEMP: Manually define backend base URL
 const API = axios.create({
-  baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`,
+  baseURL: "https://taskmanager-backend-zlv5.onrender.com/api",
   withCredentials: true,
 });
 
