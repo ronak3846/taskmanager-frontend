@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
+
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -7,7 +8,7 @@ function EmployeeList() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/employees");
+        const res = await API.get("/employees");
         setEmployees(res.data);
       } catch (err) {
         console.error("Error fetching employees:", err);

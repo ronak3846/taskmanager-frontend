@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Header from "../common/Header";
 import { AuthContext } from "../../context/AuthProvider";
 import CreateTask from "../Tasks/CreateTask";
-import axios from "axios";
+import API from "../../utils/api";
 import EmployeeList from "../Tasks/EmployeeData";
 
 function AdminDashboard() {
@@ -11,7 +11,7 @@ function AdminDashboard() {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/employees");
+      const res = await API.get("/employees");
       setEmployees(res.data);
     } catch (err) {
       console.error("❌ Failed to fetch employees", err);

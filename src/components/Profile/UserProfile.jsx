@@ -2,12 +2,12 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../../utils/api"; // ✅ centralized axios
 
 function UserProfile() {
   const { user } = useContext(AuthContext);
   const [name, setName] = useState(user?.firstname || "");
-  const [email, setEmail] = useState(user?.email || "");
+  const [email] = useState(user?.email || "");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const navigate = useNavigate();
@@ -15,14 +15,14 @@ function UserProfile() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/user/profile`, {
+      await API.put(`/user/profile`, {
         name,
         email,
         currentPassword,
         newPassword,
       });
       alert("Profile updated!");
-      navigate(-1); // go back
+      navigate(-1);
     } catch (err) {
       console.error(err);
       alert("Failed to update profile");

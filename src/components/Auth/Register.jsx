@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import API from "../../utils/api"; // ✅ Replace axios with centralized instance
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/register", formData);
+      await API.post("/auth/register", formData); // ✅ Use API instance
       alert("Registration successful! Please login.");
       navigate("/login");
     } catch (error) {
@@ -30,7 +30,6 @@ function Register() {
   return (
     <div className="w-full min-h-screen bg-[#ebe7fb]">
       <div className="flex flex-col md:flex-row h-full w-full">
-        {/* Left Panel - Form */}
         <div className="flex items-center justify-center w-full md:w-1/2 p-6 md:p-10">
           <div className="w-full max-w-md">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
@@ -104,7 +103,6 @@ function Register() {
           </div>
         </div>
 
-        {/* Right Panel - Image */}
         <div className="w-full md:w-1/2 h-64 md:h-screen">
           <img
             src="https://images.unsplash.com/photo-1618044619888-009e412ff12a?q=80&w=1171&auto=format&fit=crop"

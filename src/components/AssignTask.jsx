@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import API from "../utils/api"; // ✅ Import shared axios instance
 
 function AssignTask() {
   const { id } = useParams(); // employee ID
@@ -28,10 +28,7 @@ function AssignTask() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        `http://localhost:5000/api/employees/${id}/assign-task`,
-        formData
-      );
+      await API.post(`/employees/${id}/assign-task`, formData); // ✅ Use API
       alert("✅ Task assigned successfully");
       navigate("/admin");
     } catch (err) {
@@ -48,6 +45,7 @@ function AssignTask() {
           type="text"
           name="title"
           placeholder="Task Title"
+          value={formData.title}
           onChange={handleChange}
           required
           className="w-full border p-2 rounded"
@@ -55,6 +53,7 @@ function AssignTask() {
         <textarea
           name="description"
           placeholder="Description"
+          value={formData.description}
           onChange={handleChange}
           required
           className="w-full border p-2 rounded"
@@ -62,6 +61,7 @@ function AssignTask() {
         <input
           type="date"
           name="date"
+          value={formData.date}
           onChange={handleChange}
           required
           className="w-full border p-2 rounded"
@@ -70,30 +70,46 @@ function AssignTask() {
           type="text"
           name="category"
           placeholder="Category"
+          value={formData.category}
           onChange={handleChange}
           className="w-full border p-2 rounded"
         />
         <div className="flex flex-wrap gap-4">
           <label>
-            <input type="checkbox" name="active" onChange={handleChange} />{" "}
+            <input
+              type="checkbox"
+              name="active"
+              checked={formData.active}
+              onChange={handleChange}
+            />{" "}
             Active
           </label>
           <label>
             <input
               type="checkbox"
               name="newTask"
-              checked
+              checked={formData.newTask}
               onChange={handleChange}
             />{" "}
             New Task
           </label>
           <label>
-            <input type="checkbox" name="completed" onChange={handleChange} />{" "}
+            <input
+              type="checkbox"
+              name="completed"
+              checked={formData.completed}
+              onChange={handleChange}
+            />{" "}
             Completed
           </label>
           <label>
-            <input type="checkbox" name="failed" onChange={handleChange} />{" "}
-            failed
+            <input
+              type="checkbox"
+              name="failed"
+              checked={formData.failed}
+              onChange={handleChange}
+            />{" "}
+            Failed
           </label>
         </div>
         <button

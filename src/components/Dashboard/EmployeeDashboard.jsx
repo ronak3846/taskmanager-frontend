@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import API from "../../utils/api";
+
 import Header from "../common/Header";
 import TaskListNumbers from "../common/TaskListNumbers";
 import { AuthContext } from "../../context/AuthProvider";
@@ -17,10 +18,8 @@ function EmployeeDashboard() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:5000/api/employees/${user._id}/tasks`
-      );
-      setTasks(res.data);
+      const res = await API.get(`/employees/${user._id}/tasks`);
+            setTasks(res.data);
 
       const counts = { newTask: 0, active: 0, completed: 0, failed: 0 };
       res.data.forEach((task) => {
@@ -36,21 +35,17 @@ function EmployeeDashboard() {
   };
 
   const handleAccept = async (taskId) => {
-    await axios.put(
-      `http://localhost:5000/api/employees/tasks/${taskId}/accept`
-    );
+    await API.put(`/employees/tasks/${taskId}/accept`);
     fetchTasks();
   };
 
   const handleComplete = async (taskId) => {
-    await axios.put(
-      `http://localhost:5000/api/employees/tasks/${taskId}/complete`
-    );
+    await API.put(`/employees/tasks/${taskId}/complete`);
     fetchTasks();
   };
 
   const handleFail = async (taskId) => {
-    await axios.put(`http://localhost:5000/api/employees/tasks/${taskId}/fail`);
+    await API.put(`/employees/tasks/${taskId}/fail`);
     fetchTasks();
   };
 
@@ -58,10 +53,7 @@ function EmployeeDashboard() {
     const comment = commentInput[taskId];
     if (!comment?.trim()) return;
 
-    await axios.post(
-      `http://localhost:5000/api/employees/tasks/${taskId}/comments`,
-      { text: comment }
-    );
+    await API.post(`/employees/tasks/${taskId}/comments`, { text: comment });
     setCommentInput({ ...commentInput, [taskId]: "" });
     fetchTasks();
   };
