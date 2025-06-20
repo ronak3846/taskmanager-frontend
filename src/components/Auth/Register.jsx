@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../../utils/api"; // ✅ Replace axios with centralized instance
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -19,10 +21,14 @@ function Register() {
     e.preventDefault();
     try {
       await API.post("/auth/register", formData); // ✅ Use API instance
-      alert("Registration successful! Please login.");
+      toast.success("Registration successful! Please login.", {
+        position: "top-right",
+      });
       navigate("/login");
     } catch (error) {
-      alert("Registration failed");
+      toast.error("Registration failed" ,  {
+        position: "top-right",
+      });
       console.error(error);
     }
   };

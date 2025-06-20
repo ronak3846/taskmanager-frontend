@@ -4,10 +4,28 @@ import { AuthContext } from "../../context/AuthProvider";
 import CreateTask from "../Tasks/CreateTask";
 import API from "../../utils/api";
 import EmployeeList from "../Tasks/EmployeeData";
+import AdminStatsCards from "../AdminData/AdminStatsCards";
+import AllTasksModal from "../AdminData/AllTasksModal";
 
 function AdminDashboard() {
   const { user } = useContext(AuthContext);
   const [employees, setEmployees] = useState([]);
+
+  // const [showModal, setShowModal] = useState(false);
+  // const [allTasks, setAllTasks] = useState([]);
+
+
+  // const fetchAllTasks = async () => {
+  //   try {
+  //     const res = await API.get("/tasks"); // make sure your backend route exists
+  //     setAllTasks(res.data);
+  //     setShowModal(true);
+  //   } catch (err) {
+  //     console.error("Error fetching tasks:", err);
+  //   }
+  // };
+  
+
 
   const fetchEmployees = async () => {
     try {
@@ -36,6 +54,21 @@ function AdminDashboard() {
           <p className="text-gray-500">Assign tasks and manage employees.</p>
         </div>
 
+        <div>
+          <AdminStatsCards employees={employees} />
+        </div>
+
+        {/* <div>
+          <button onClick={fetchAllTasks}>📋 View All Tasks</button>
+
+          {showModal && (
+            <AllTasksModal
+              tasks={allTasks}
+              onClose={() => setShowModal(false)}
+            />
+          )}
+        </div> */}
+
         {/* Create Task Section */}
         <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
           <h2 className="text-2xl font-semibold mb-4">Create & Assign Task</h2>
@@ -46,7 +79,7 @@ function AdminDashboard() {
         <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
           <h2 className="text-2xl font-semibold mb-6">Employee Overview</h2>
           <div className="overflow-x-auto">
-            <EmployeeList/>
+            <EmployeeList />
           </div>
         </div>
       </div>

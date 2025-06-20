@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const { login } = useContext(AuthContext);
@@ -16,11 +18,15 @@ function Login() {
     const user = await login(email, password);
     if (user) {
       if (user.role === "admin") navigate("/admin");
-      else if (user.role === "employee") navigate("/employee");
+      else if (user.role === "employee") navigate("/employee/dashboard");
     } else {
-      alert("Invalid credentials");
+      toast.error
+      ("Invalid Details", {
+              position: "top-right",
+            });
     }
-  };return (
+  };
+  return (
     <div className="w-full min-h-screen bg-[#ebe7fb]">
       <div className="flex flex-col md:flex-row h-full w-full">
         {/* Left Panel */}
@@ -41,6 +47,8 @@ function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  autoComplete="on"
+                  name="email"
                   className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                 />
               </div>
@@ -52,6 +60,7 @@ function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  name="password"
                   className="w-full pl-4 pr-20 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                 />
                 <button

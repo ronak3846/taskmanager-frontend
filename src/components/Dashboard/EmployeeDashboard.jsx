@@ -160,11 +160,116 @@
 
 // export default EmployeeDashboard;
 
+// import React, { useEffect, useState, useContext } from "react";
+// import API from "../../utils/api";
+// import { AuthContext } from "../../context/AuthProvider";
+// import DashboardStats from "./DashboardStats";
+// import TaskCardSection from "./TaskCardSection";
+
+// function EmployeeDashboard() {
+//   const { user } = useContext(AuthContext);
+//   const [tasks, setTasks] = useState([]);
+//   const [taskCount, setTaskCount] = useState({
+//     newTask: 0,
+//     active: 0,
+//     completed: 0,
+//     failed: 0,
+//   });
+
+//   const handleAction = async (actionType, taskId) => {
+//     try {
+//       await API.put(`/employees/tasks/${taskId}/${actionType}`);
+//       fetchTasks(); // reload
+//     } catch (err) {
+//       console.error(err);
+//       alert("Action failed");
+//     }
+//   };
+
+//   const fetchTasks = async () => {
+//     try {
+//       const res = await API.get(`/employees/${user._id}/tasks`);
+//       setTasks(res.data);
+
+//       const counts = { newTask: 0, active: 0, completed: 0, failed: 0 };
+//       res.data.forEach((task) => {
+//         if (task.newTask) counts.newTask++;
+//         if (task.active) counts.active++;
+//         if (task.completed) counts.completed++;
+//         if (task.failed) counts.failed++;
+//       });
+//       setTaskCount(counts);
+//     } catch (err) {
+//       console.error("❌ Failed to fetch tasks:", err);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (user?._id) fetchTasks();
+//   }, [user]);
+
+//   const totalTasks = Object.values(taskCount).reduce((a, b) => a + b, 0);
+//   const completedPercent = totalTasks
+//     ? Math.round((taskCount.completed / totalTasks) * 100)
+//     : 0;
+
+//   const isDueSoon = (date) => {
+//     const today = new Date();
+//     const taskDate = new Date(date);
+//     const diff = (taskDate - today) / (1000 * 60 * 60 * 24);
+//     return diff < 3;
+//   };
+
+
+
+//   return (
+//     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition duration-300">
+      
+
+//       <div className="max-w-6xl mx-auto p-4">
+//         <h1 className="text-2xl font-bold mb-4 text-center">Your Dashboard</h1>
+
+        
+//         <DashboardStats name={user?.firstname} taskCount={taskCount} />
+
+       
+//         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+//           <TaskCardSection
+//             title="🆕 New Tasks"
+//             tasks={tasks.filter((t) => t.newTask)}
+//             type="newTask"
+//             onAction={handleAction}
+//           />
+//           <TaskCardSection
+//             title="🚀 Active Tasks"
+//             tasks={tasks.filter((t) => t.active)}
+//             type="active"
+//             onAction={handleAction}
+//           />
+//           <TaskCardSection
+//             title="✅ Completed Tasks"
+//             tasks={tasks.filter((t) => t.completed)}
+//             type="completed"
+//           />
+//           <TaskCardSection
+//             title=" Failed"
+//             tasks={tasks.filter((t) => t.failed)}
+//             type="failed"
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default EmployeeDashboard;
+
+
 import React, { useEffect, useState, useContext } from "react";
 import API from "../../utils/api";
-import Header from "../common/Header";
 import { AuthContext } from "../../context/AuthProvider";
-import TaskListNumbers from "../common/TaskListNumbers";
+import DashboardStats from "./DashboardStats";
+import TaskCardSection from "./TaskCardSection";
 
 function EmployeeDashboard() {
   const { user } = useContext(AuthContext);
@@ -176,6 +281,7 @@ function EmployeeDashboard() {
     failed: 0,
   });
 
+  // Fetch user tasks
   const fetchTasks = async () => {
     try {
       const res = await API.get(`/employees/${user._id}/tasks`);
@@ -194,80 +300,52 @@ function EmployeeDashboard() {
     }
   };
 
+  // Handle task status actions
+  const handleAction = async (actionType, taskId) => {
+    try {
+      await API.put(`/employees/tasks/${taskId}/${actionType}`);
+      fetchTasks(); // reload data
+    } catch (err) {
+      console.error(err);
+      alert("❌ Action failed. Please try again.");
+    }
+  };
+
   useEffect(() => {
     if (user?._id) fetchTasks();
   }, [user]);
 
-  const totalTasks = Object.values(taskCount).reduce((a, b) => a + b, 0);
-  const completedPercent = totalTasks
-    ? Math.round((taskCount.completed / totalTasks) * 100)
-    : 0;
-
-  const isDueSoon = (date) => {
-    const today = new Date();
-    const taskDate = new Date(date);
-    const diff = (taskDate - today) / (1000 * 60 * 60 * 24);
-    return diff < 3;
-  };
-
-  const TaskCard = ({ title, tasks }) => (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
-      <h3 className="text-lg font-semibold mb-3">{title}</h3>
-      <div className="space-y-3">
-        {tasks.map((task) => (
-          <div key={task._id} className="border-l-4 border-blue-600 pl-3">
-            <h4 className="font-bold">{task.title}</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {task.description}
-              {isDueSoon(task.date) && (
-                <span className="text-red-500 ml-2 text-xs">Due Soon</span>
-              )}
-            </p>
-            <div className="text-xs text-gray-500">
-              {task.category} | {task.date}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition duration-300">
-      <div className="shadow sticky top-0 bg-white dark:bg-gray-800 z-50">
-        <Header name={user?.firstname || "Employee"} />
-      </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        <h1 className="text-3xl font-bold text-center mb-6">Your Dashboard</h1>
 
-      <div className="max-w-6xl mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4 text-center">Your Dashboard</h1>
+        {/* Stats + Chart Section */}
+        <DashboardStats name={user?.firstname} taskCount={taskCount} />
 
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <p className="text-sm text-gray-500">Progress</p>
-          <div className="w-full bg-gray-300 rounded h-2">
-            <div
-              className="bg-green-500 h-2 rounded"
-              style={{ width: `${completedPercent}%` }}
-            ></div>
-          </div>
-          <p className="text-sm mt-1">{completedPercent}% Completed</p>
-        </div>
-
-        <TaskListNumbers taskCount={taskCount} />
-
-        {/* Task Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <TaskCard
-            title="🆕 New Tasks"
+        {/* Task Cards Section */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mt-10">
+          <TaskCardSection
+            title="New Tasks"
             tasks={tasks.filter((t) => t.newTask)}
+            type="newTask"
+            onAction={handleAction}
           />
-          <TaskCard
-            title="🚀 Active Tasks"
+          <TaskCardSection
+            title="Active Tasks"
             tasks={tasks.filter((t) => t.active)}
+            type="active"
+            onAction={handleAction}
           />
-          <TaskCard
-            title="✅ Completed Tasks"
+          <TaskCardSection
+            title="Completed Tasks"
             tasks={tasks.filter((t) => t.completed)}
+            type="completed"
+          />
+          <TaskCardSection
+            title="Failed Tasks"
+            tasks={tasks.filter((t) => t.failed)}
+            type="failed"
           />
         </div>
       </div>
