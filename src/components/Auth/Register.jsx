@@ -36,6 +36,17 @@ function Register() {
   return (
     <div className="w-full min-h-screen bg-[#ebe7fb]">
       <div className="flex flex-col md:flex-row h-full w-full">
+        <div className="w-full md:w-1/2 h-64 md:h-screen bg-purple-600 flex items-center justify-center flex-col  ">
+          <img
+            src="/logosimple.png"
+            alt="Register Illustration"
+            className="w-40 h-40 bg-white rounded-full"
+          />
+          <h1 className="text-white font-semibold text-4xl mt-2.5">
+            TaskSuite
+          </h1>
+          <h3 className="text-white mt-3.5 text-2xl">Your Complete Suite for Task Management.</h3>
+        </div>
         <div className="flex items-center justify-center w-full md:w-1/2 p-6 md:p-10">
           <div className="w-full max-w-md">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
@@ -107,14 +118,6 @@ function Register() {
               </Link>
             </p>
           </div>
-        </div>
-
-        <div className="w-full md:w-1/2 h-64 md:h-screen">
-          <img
-            src="https://images.unsplash.com/photo-1618044619888-009e412ff12a?q=80&w=1171&auto=format&fit=crop"
-            alt="Register Illustration"
-            className="w-full h-full object-cover"
-          />
         </div>
       </div>
     </div>

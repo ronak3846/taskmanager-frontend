@@ -93,12 +93,18 @@ function Login() {
         </div>
 
         {/* Right Panel */}
-        <div className="w-full md:w-1/2 h-64 md:h-screen">
+        <div className="w-full md:w-1/2 h-64 md:h-screen bg-purple-600 flex items-center justify-center flex-col">
           <img
-            src="https://images.unsplash.com/photo-1618044619888-009e412ff12a?q=80&w=1171&auto=format&fit=crop"
-            alt="login-img"
-            className="w-full h-full object-cover"
+            src="/logosimple.png"
+            alt="Register Illustration"
+            className="w-40 h-40 bg-white rounded-full"
           />
+          <h1 className="text-white font-semibold text-4xl mt-2.5">
+            TaskSuite
+          </h1>
+          <h3 className="text-white mt-3.5 text-2xl">
+            Your Complete Suite for Task Management.
+          </h3>
         </div>
       </div>
     </div>
