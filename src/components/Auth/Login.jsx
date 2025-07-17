@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../Loader";
 
 function Login() {
   const { login } = useContext(AuthContext);
@@ -11,23 +12,35 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(false); // ✅ added loading state
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // prevent page reload
-    const user = await login(email, password);
-    if (user) {
-      if (user.role === "admin") navigate("/admin");
-      else if (user.role === "employee") navigate("/employee/dashboard");
-    } else {
-      toast.error
-      ("Invalid Details", {
-              position: "top-right",
-            });
+    setLoading(true); // ✅ show loader
+    try {
+      const user = await login(email, password);
+      if (user) {
+        if (user.role === "admin") navigate("/admin");
+        else if (user.role === "employee") navigate("/employee/dashboard");
+      } else {
+        toast.error("Invalid Details", {
+          position: "top-right",
+        });
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      toast.error("Something went wrong", {
+        position: "top-right",
+      });
+    } finally {
+      setLoading(false); // ✅ hide loader
     }
   };
+
   return (
-    <div className="w-full min-h-screen bg-[#ebe7fb]">
+    <div className="w-full min-h-screen bg-[#ebe7fb] relative">
+      <ToastContainer />
+      {loading && <Loader />} {/* ✅ loader overlay */}
       <div className="flex flex-col md:flex-row h-full w-full">
         {/* Left Panel */}
         <div className="flex items-center justify-center w-full md:w-1/2 p-6 md:p-10">
@@ -35,7 +48,7 @@ function Login() {
             <h2 className="text-3xl font-bold text-center text-fuchsia-800 mb-2">
               LOGIN
             </h2>
-            <p className="text-sm  text-gray-500 text-center mb-8">
+            <p className="text-sm text-gray-500 text-center mb-8">
               Welcome to TaskManager
             </p>
 
@@ -109,7 +122,6 @@ function Login() {
       </div>
     </div>
   );
-  
-};
+}
 
 export default Login;
