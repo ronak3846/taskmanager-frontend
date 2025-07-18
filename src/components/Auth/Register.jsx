@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../../utils/api"; // ✅ Replace axios with centralized instance
-import { toast } from "react-toastify";
+import { toast , ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
@@ -34,94 +34,103 @@ function Register() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#ebe7fb]">
-      <div className="flex flex-col md:flex-row h-full w-full">
-        <div className="w-full md:w-1/2 h-64 md:h-screen bg-purple-600 flex items-center justify-center flex-col  ">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#ebe7fb]">
+      <ToastContainer />
+
+
+      {/* Branding Panel (top on mobile, side on desktop) */}
+      <div className="w-full md:w-1/2 flex items-center justify-center bg-purple-600 py-8 md:py-0">
+        <div className="flex flex-col items-center">
           <img
             src="/logosimple.png"
             alt="Register Illustration"
-            className="w-40 h-40 bg-white rounded-full"
+            className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-white rounded-full object-cover"
           />
-          <h1 className="text-white font-semibold text-4xl mt-2.5">
+          <h1 className="text-white font-semibold text-2xl sm:text-3xl md:text-4xl mt-4 text-center">
             TaskSuite
           </h1>
-          <h3 className="text-white mt-3.5 text-2xl">Your Complete Suite for Task Management.</h3>
+          <h3 className="text-white mt-2 sm:mt-3 text-lg sm:text-xl md:text-2xl text-center px-4">
+            Your Complete Suite for Task Management.
+          </h3>
         </div>
-        <div className="flex items-center justify-center w-full md:w-1/2 p-6 md:p-10">
-          <div className="w-full max-w-md">
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
-              Create an Account
-            </h2>
-            <p className="text-sm text-center text-gray-500 mb-8">
-              Join us to manage your tasks better!
-            </p>
+      </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <input
-                  type="text"
-                  name="firstname"
-                  placeholder="Your Name"
-                  value={formData.firstname}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
+      {/* Form Panel */}
+      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-10 sm:px-6 md:px-10">
+        <div className="w-full max-w-md">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-2">
+            Create an Account
+          </h2>
+          <p className="text-sm text-center text-gray-500 mb-6 sm:mb-8">
+            Join us to manage your tasks better!
+          </p>
 
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="you@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+            <div>
+              <input
+                type="text"
+                name="firstname"
+                placeholder="Your Name"
+                value={formData.firstname}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
+              />
+            </div>
 
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Enter a strong password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 pr-16 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-3 text-sm text-purple-600"
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
+            <div>
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
+              />
+            </div>
 
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter a strong password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 pr-16 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
+              />
               <button
-                type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-3 text-sm text-purple-600"
               >
-                Sign Up
+                {showPassword ? "Hide" : "Show"}
               </button>
-            </form>
+            </div>
 
-            <p className="mt-6 text-center text-sm text-gray-500">
-              Already registered?{" "}
-              <Link
-                to="/login"
-                className="text-purple-600 hover:underline font-medium"
-              >
-                Login
-              </Link>
-            </p>
-          </div>
+            <button
+              type="submit"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition text-sm sm:text-base"
+            >
+              Sign Up
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-sm text-gray-500">
+            Already registered?{" "}
+            <Link
+              to="/login"
+              className="text-purple-600 hover:underline font-medium"
+            >
+              Login
+            </Link>
+          </p>
         </div>
       </div>
     </div>
   );
+
 }
 
 export default Register;
